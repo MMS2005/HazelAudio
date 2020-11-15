@@ -177,6 +177,56 @@ namespace Hazel {
 
 		return result;
 	}
+	//Loads Wave Files
+	AudioSource Audio::LoadAudioSourceWav(const std::string& filename)
+	{
+		if (GetFileFormat(filename) != AudioFileFormat::Wave)
+		{
+			HA_LOG("Unidentified file format");
+
+		}
+		//Open's the preferred device
+		const auto device = alcOpenDevice(NULL);
+		if (device)
+		{
+			auto d_context = alcCreateContext(device, NULL);
+			//Make Context Current
+			alcMakeContextCurrent(d_context);
+		}
+		
+		uint32_t al_buffer;
+	
+		alGenBuffers(1, &al_buffer);// Please Check for this Macro I cannot Figure Out What File this Buffer Is in
+		if (alGetError() != AL_NO_ERROR)
+		{
+			HA_LOG("");
+			
+		}
+		uint8_t channel_name;
+		int32_t sample_rate;
+		uint8_t bits_sample;
+		int32_t size;
+		ALenum format;
+		uint32_t source;
+		const char* wave_file_data = Hazel::Load_Wave(filename, channel_name, sample_rate, bits_sample, size);
+		alBufferData(al_buffer, format, wave_file_data, size, 1);//Please Check for the Frequency
+		AudioSource loaded_wave_file_data = { al_buffer,true, };// Want to Fill in the File Size
+		if (auto error = alGetError() != AL_NO_ERROR)
+		{
+			HA_LOG(error);
+		}
+		alGenSources(1, &loaded_wave_file_data.m_SourceHandle);
+		if (auto error = alGetError() != AL_NO_ERROR)
+		{
+			HA_LOG(error);
+		}
+		alSourcei(loaded_wave_file_data.m_SourceHandle,AL_BUFFER, al_buffer);
+		if (auto error = alGetError() != AL_NO_ERROR)
+		{
+			HA_LOG(error);
+		}
+		return loaded_wave_file_data;
+	}
 
 	static void PrintAudioDeviceInfo()
 	{
