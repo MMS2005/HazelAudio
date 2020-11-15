@@ -5,6 +5,7 @@
 #include <string>
 #include <thread>
 #include <filesystem>
+#include <fstream>
 
 #include "AL/al.h"
 #include "AL/alext.h"
@@ -303,5 +304,33 @@ namespace Hazel {
 		result.SetSpatial(spatial);
 		return result;
 	}
+
+
+    //Note This is an Raw Opener For AL Opener Use LoadSourceFileWave() Function
+    char* Load_Wave(const std::string& filename,
+        std::uint8_t& channels,
+        std::int32_t& sampleRate,
+        std::uint8_t& bitsPerSample,
+        ALsizei& size)
+    {
+        std::ifstream open_wav (filename, std::ios::binary);
+        if (!open_wav.is_open())
+        {
+            std::cerr << "ERROR: Could not open \"" << filename << "\"" << std::endl;
+            return nullptr;
+        }
+        if (!Load_Wave(filename, channels, sampleRate, bitsPerSample, size))
+        {
+            std::cerr << "ERROR: Could not load wav header of \"" << filename << "\"" << std::endl;
+            return nullptr;
+        }
+
+        char* data = new char[size];
+
+        open_wav.read(data, size);
+
+        return data;
+    }
+
 
 }
