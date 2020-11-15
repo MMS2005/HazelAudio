@@ -54,6 +54,7 @@ namespace Hazel {
 	private:
 		static AudioSource LoadAudioSourceOgg(const std::string& filename);
 		static AudioSource LoadAudioSourceMP3(const std::string& filename);
+		static AudioSource LoadAudioSourceWav(const std::string& filename);
 	};
 
 }
