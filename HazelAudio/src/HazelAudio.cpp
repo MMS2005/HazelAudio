@@ -35,7 +35,8 @@ namespace Hazel {
 	{
 		None = 0,
 		Ogg,
-		MP3
+		MP3,
+		Wave
 	};
 
 	static AudioFileFormat GetFileFormat(const std::string& filename)
@@ -45,6 +46,7 @@ namespace Hazel {
 
 		if (extension == ".ogg")  return AudioFileFormat::Ogg;
 		if (extension == ".mp3")  return AudioFileFormat::MP3;
+		if (extension == ".wav")  return AudioFileFormat::Wave;
 		
 		return AudioFileFormat::None;
 	}
