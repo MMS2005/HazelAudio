@@ -208,6 +208,16 @@ namespace Hazel {
 		int32_t size;
 		ALenum format;
 		uint32_t source;
+		ALenum format;
+    		if(channels == 1 && bitsPerSample == 8)
+        		format = AL_FORMAT_MONO8;
+   		 else if(channels == 1 && bitsPerSample == 16)
+        		format = AL_FORMAT_MONO16;
+    		else if(channels == 2 && bitsPerSample == 8)
+        		format = AL_FORMAT_STEREO8;
+    		else if(channels == 2 && bitsPerSample == 16)
+        		format = AL_FORMAT_STEREO16;
+    		else
 		const char* wave_file_data = Hazel::Load_Wave(filename, channel_name, sample_rate, bits_sample, size);
 		alBufferData(al_buffer, format, wave_file_data, size, 1);//Please Check for the Frequency
 		AudioSource loaded_wave_file_data = { al_buffer,true, };// Want to Fill in the File Size
